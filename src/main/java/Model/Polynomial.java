@@ -4,6 +4,9 @@ import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+
 
 public class Polynomial implements Comparable<Polynomial> {
 
@@ -14,46 +17,44 @@ public class Polynomial implements Comparable<Polynomial> {
     }
 
     public Polynomial conversion(String polynomialString) {
-
         Polynomial result = new Polynomial();
-        String[] terms = polynomialString.split("(?=\\+|\\-)");
 
-        for (String term : terms) {
+        Pattern termPattern = Pattern.compile("([+-]?((?:(?:\\d+(?:\\.\\d*)?)|(?:(?:\\.\\d+)))(?:x(?:\\^((?:\\d+)))?)?))");
+        Matcher termMatcher = termPattern.matcher(polynomialString);
+
+        while (termMatcher.find()) {
             double coefficient;
             int exponent;
 
-            String[] parts = term.split("x\\^?");
+            String term = termMatcher.group(1);
 
-            if (parts.length == 2) {
+            Pattern partsPattern = Pattern.compile("([+-]?((?:(?:\\d+(?:\\.\\d*)?)|(?:(?:\\.\\d+)))))(?:x(?:\\^((?:\\d+)))?)?");
+            Matcher partsMatcher = partsPattern.matcher(term);
+            partsMatcher.find();
 
-                coefficient = parseCoefficient(parts[0]);
-                exponent = Integer.parseInt(parts[1]);
-            } else if (term.contains("x")) {
+            String coefficientStr = partsMatcher.group(1);
+            String exponentStr = partsMatcher.group(3);
 
-                coefficient = parseCoefficient(parts[0]);
-                exponent = 1;
+            if (coefficientStr == null || coefficientStr.isEmpty()) {
+                coefficient = term.contains("x") ? 1 : 0;
+            } else if (coefficientStr.equals("+")) {
+                coefficient = 1;
+            } else if (coefficientStr.equals("-")) {
+                coefficient = -1;
             } else {
+                coefficient = Double.parseDouble(coefficientStr);
+            }
 
-                coefficient = parseCoefficient(term);
-                exponent = 0;
+            if (exponentStr == null) {
+                exponent = coefficientStr != null && !coefficientStr.isEmpty() && term.contains("x") ? 1 : 0;
+            } else {
+                exponent = Integer.parseInt(exponentStr);
             }
 
             result.getCoefficient().put(exponent, coefficient);
         }
 
         return result;
-    }
-
-    private double parseCoefficient(String term) {
-        if (term.equals("+")) {
-            return 1;
-        } else if (term.equals("-")) {
-            return -1;
-        } else if (term.isEmpty()) {
-            return 0;
-        } else {
-            return Double.parseDouble(term);
-        }
     }
 
     public Polynomial addition(Polynomial p) {
@@ -168,11 +169,8 @@ public class Polynomial implements Comparable<Polynomial> {
 
             double quotientCoefficient = remainder.coefficient.get(dividendDegree) / divisor.coefficient.get(divisorDegree);
             quotient.coefficient.put(quotientDegree, quotientCoefficient);
-
             Polynomial product = quotient.multiplication(divisor);
-
             remainder = remainder.subtraction(product);
-
 
             remainder = removeZeroCoefficients(remainder);
 

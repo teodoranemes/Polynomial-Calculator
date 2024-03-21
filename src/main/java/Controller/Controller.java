@@ -32,6 +32,16 @@ public class Controller {
             String polynomialString2 = view.getTextField2().getText();
             polynomial2 = polynomial2.conversion(polynomialString2);
 
+            if (polynomial1.getCoefficient().isEmpty()) {
+                view.getTextArea1().setText("Polinom 1 incorect. Reintroduceti valorile");
+                return;
+            }
+
+            if (polynomial2.getCoefficient().isEmpty()) {
+                view.getTextArea1().setText("Polinom 2 incorect. Reintroduceti valorile");
+                return;
+            }
+
             Polynomial result = polynomial1.addition(polynomial2);
             view.getTextArea1().setText(result.toString());
         }
@@ -45,6 +55,16 @@ public class Controller {
 
             String polynomialString2 = view.getTextField2().getText();
             polynomial2 = polynomial2.conversion(polynomialString2);
+
+            if (polynomial1.getCoefficient().isEmpty()) {
+                view.getTextArea1().setText("Polinom 1 incorect. Reintroduceti valorile");
+                return;
+            }
+
+            if (polynomial2.getCoefficient().isEmpty()) {
+                view.getTextArea1().setText("Polinom 2 incorect. Reintroduceti valorile");
+                return;
+            }
 
             Polynomial result = polynomial1.subtraction(polynomial2);
             view.getTextArea1().setText(result.toString());
@@ -60,6 +80,16 @@ public class Controller {
             String polynomialString2 = view.getTextField2().getText();
             polynomial2 = polynomial2.conversion(polynomialString2);
 
+            if (polynomial1.getCoefficient().isEmpty()) {
+                view.getTextArea1().setText("Polinom 1 incorect. Reintroduceti valorile");
+                return;
+            }
+
+            if (polynomial2.getCoefficient().isEmpty()) {
+                view.getTextArea1().setText("Polinom 2 incorect. Reintroduceti valorile");
+                return;
+            }
+
             Polynomial result = polynomial1.multiplication(polynomial2);
             view.getTextArea1().setText(result.toString());
         }
@@ -72,6 +102,16 @@ public class Controller {
 
             String polynomialString2 = view.getTextField2().getText();
             polynomial2 = polynomial2.conversion(polynomialString2);
+
+            if (polynomial1.getCoefficient().isEmpty()) {
+                view.getTextArea1().setText("Polinom 1 incorect. Reintroduceti valorile");
+                return;
+            }
+
+            if (polynomial2.getCoefficient().isEmpty()) {
+                view.getTextArea1().setText("Polinom 2 incorect. Reintroduceti valorile");
+                return;
+            }
 
             DivisionResult divisionResult = polynomial1.division(polynomial2);
             Polynomial quotient = divisionResult.getQuotient();
@@ -89,6 +129,11 @@ public class Controller {
             String polynomialString1 = view.getTextField1().getText();
             polynomial1 = polynomial1.conversion(polynomialString1);
 
+            if (polynomial1.getCoefficient().isEmpty()) {
+                view.getTextArea1().setText("Polinom 1 incorect. Reintroduceti valorile");
+                return;
+            }
+
             Polynomial result = polynomial1.derivative();
             view.getTextArea1().setText(result.toString());
         }
@@ -99,6 +144,11 @@ public class Controller {
 
             String polynomialString1 = view.getTextField1().getText();
             polynomial1 = polynomial1.conversion(polynomialString1);
+
+            if (polynomial1.getCoefficient().isEmpty()) {
+                view.getTextArea1().setText("Polinom 1 incorect. Reintroduceti valorile");
+                return;
+            }
 
             Polynomial result = polynomial1.integration();
             view.getTextArea1().setText(result.toString());
